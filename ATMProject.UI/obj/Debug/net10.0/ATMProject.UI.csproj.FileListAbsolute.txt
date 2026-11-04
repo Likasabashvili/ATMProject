@@ -1,0 +1,14 @@
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/bin/Debug/net10.0/ATMProject.UI
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/bin/Debug/net10.0/ATMProject.UI.deps.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/bin/Debug/net10.0/ATMProject.UI.runtimeconfig.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/bin/Debug/net10.0/ATMProject.UI.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/bin/Debug/net10.0/ATMProject.UI.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.GeneratedMSBuildEditorConfig.editorconfig
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.AssemblyInfoInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.AssemblyInfo.cs
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.csproj.CoreCompileInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/refint/ATMProject.UI.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ATMProject.UI.genruntimeconfig.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/obj/Debug/net10.0/ref/ATMProject.UI.dll
