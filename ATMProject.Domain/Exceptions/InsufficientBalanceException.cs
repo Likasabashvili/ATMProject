@@ -1,6 +1,10 @@
 namespace ATMProject.Domain.Exceptions;
 
-public class InsufficientBalanceException
+public class InsufficientBalanceException : Exception
 {
-    
+    public InsufficientBalanceException()
+        : base("Insufficient Balance")
+    {
+    }
+
 }
