@@ -15,12 +15,12 @@ namespace University.Application.Services.Implemetations
 		{
 			SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
 			smtpClient.UseDefaultCredentials = false;
-			smtpClient.Credentials = new NetworkCredential("sendv39@gmail.com", "chpy ntyf pzdo pjyw");
+			smtpClient.Credentials = new NetworkCredential("sendv39@gmail.com", "pdio zosc gfvy ptrk");
 			smtpClient.EnableSsl = true;
 
 
 			MailMessage message = new MailMessage();
-			message.From = new MailAddress("stepacc210@gmail.com");
+			message.From = new MailAddress("sendv39@gmail.com");
 			message.To.Add(to);
 			message.Subject = subject;
 			message.Body = body;
