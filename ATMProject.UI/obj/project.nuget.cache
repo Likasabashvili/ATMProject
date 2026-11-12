@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "GWaeC2OhE0s=",
+  "dgSpecHash": "E1LUbrVwFr0=",
   "success": true,
   "projectFilePath": "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/ATMProject.UI.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/likasabashvili/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/spectre.console/0.57.2/spectre.console.0.57.2.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/spectre.console.ansi/0.57.2/spectre.console.ansi.0.57.2.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/spectre.console.cli/0.57.2/spectre.console.cli.0.57.2.nupkg.sha512"
+  ],
   "logs": []
 }

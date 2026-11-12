@@ -14,4 +14,8 @@
       <ProjectReference Include="..\ATMProject.Infrastructure\ATMProject.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Spectre.Console.Cli" Version="0.57.2" />
+    </ItemGroup>
+
 </Project>
