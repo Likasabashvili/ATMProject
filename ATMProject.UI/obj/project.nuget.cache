@@ -1,13 +1,26 @@
 {
   "version": 2,
-  "dgSpecHash": "E1LUbrVwFr0=",
+  "dgSpecHash": "RA6YPMcBt2Q=",
   "success": true,
   "projectFilePath": "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.UI/ATMProject.UI.csproj",
   "expectedPackageFiles": [
     "/Users/likasabashvili/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration/11.0.0/microsoft.extensions.configuration.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration.abstractions/11.0.0/microsoft.extensions.configuration.abstractions.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration.fileextensions/11.0.0/microsoft.extensions.configuration.fileextensions.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration.json/11.0.0/microsoft.extensions.configuration.json.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.dependencyinjection/11.0.0/microsoft.extensions.dependencyinjection.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/11.0.0/microsoft.extensions.dependencyinjection.abstractions.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.fileproviders.abstractions/11.0.0/microsoft.extensions.fileproviders.abstractions.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.fileproviders.physical/11.0.0/microsoft.extensions.fileproviders.physical.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.filesystemglobbing/11.0.0/microsoft.extensions.filesystemglobbing.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.primitives/11.0.0/microsoft.extensions.primitives.11.0.0.nupkg.sha512",
     "/Users/likasabashvili/.nuget/packages/spectre.console/0.57.2/spectre.console.0.57.2.nupkg.sha512",
     "/Users/likasabashvili/.nuget/packages/spectre.console.ansi/0.57.2/spectre.console.ansi.0.57.2.nupkg.sha512",
-    "/Users/likasabashvili/.nuget/packages/spectre.console.cli/0.57.2/spectre.console.cli.0.57.2.nupkg.sha512"
+    "/Users/likasabashvili/.nuget/packages/spectre.console.cli/0.57.2/spectre.console.cli.0.57.2.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/system.io.pipelines/11.0.0/system.io.pipelines.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/system.text.encodings.web/11.0.0/system.text.encodings.web.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/system.text.json/11.0.0/system.text.json.11.0.0.nupkg.sha512"
   ],
   "logs": []
 }

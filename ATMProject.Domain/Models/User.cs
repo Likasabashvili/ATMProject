@@ -16,6 +16,6 @@ public class User
 
     public override string ToString()
     {
-        return $"{Id} | {Username} | {PasswordHash}  | {Role}  | {VerificationCode} | {isVerified}";
+        return $"{Id}|{Username}|{Email}|{PasswordHash}|{Role}|{VerificationCode}|{isVerified}";
     }
 }

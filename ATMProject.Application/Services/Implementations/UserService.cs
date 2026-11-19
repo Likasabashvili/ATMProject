@@ -9,13 +9,11 @@ public class UserService : IUserService
 {
 
     private readonly IUserRepository _userRepository;
-    private readonly IAccountRepository _accountRepository;
     private readonly IEmailService _emailService;
 
-    public UserService(IUserRepository userRepository, IAccountRepository accountRepository, IEmailService emailService)
+    public UserService(IUserRepository userRepository, IEmailService emailService)
     {
         _userRepository = userRepository;
-        _accountRepository = accountRepository;
         _emailService = emailService;
     }
 
@@ -55,7 +53,7 @@ public class UserService : IUserService
 
     public void Verfy(string email, string verificationCode)
     {
-        List<string> newUserList = new List<string>(); 
+        List<string> newUserList = new List<string>();
         _userRepository.DeleteAllUsers();
         _userRepository.SaveUsers(newUserList);
     }
@@ -64,21 +62,20 @@ public class UserService : IUserService
     {
         var user = _userRepository.GetUserByEmail(email);
 
-        if (user.isVerified == false)
+        if (user == null)
         {
-            throw new UnauthorizedAccessException("User is not verified. Please verify your account and try again");
+            throw new UnauthorizedAccessException("Invalid Email or Password");
         }
 
-        if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+        if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
-            Console.WriteLine("Login Successful!");
-            return user;
+            throw new UnauthorizedAccessException("Invalid Email or Password");
         }
-throw new UnauthorizedAccessException("Invalid Email or Password");
+
+        Console.WriteLine("Login Successful!");
+        return user;
     }
-
 }
-
         
         
     

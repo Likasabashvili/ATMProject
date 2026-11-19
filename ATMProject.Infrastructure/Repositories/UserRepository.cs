@@ -12,45 +12,38 @@ public class UserRepository  : IUserRepository
     {
         File.AppendAllLines(_path, new List<string>{user.ToString()});
     }
-
+    
     public List<User> GetAllUsers()
     {
-        var UserLines = File.ReadAllLines(_path).ToList();
-        List<User> clientList = new List<User>();
-        foreach (var line in UserLines)
-        {
-            var parts = line.Split('|');
-            User client = new User();
-            
-            client.Id = int.Parse(parts[0]);
-            client.Username = parts[1];
-            client.PasswordHash = parts[2];
-            clientList.Add(client);
-        }
-        return clientList;
-    }
+        var userLines = File.ReadAllLines(_path);
+        List<User> users = new();
 
-    public User GetUserByEmail(string email)
-    {
-        var userLines = File.ReadAllLines(_path).ToList();
         foreach (var line in userLines)
         {
             var parts = line.Split('|');
-            if (parts[2] == email)
+
+            User user = new User
             {
-                User user = new User();
-                user.Id = int.Parse(parts[0]);
-                user.Username = parts[1];
-                user.Email = parts[2];
-                user.PasswordHash = parts[3];
-                user.Role = Enum.Parse<UserRole>(parts[4]);
-                user.VerificationCode = parts[5];
-                user.isVerified = bool.Parse(parts[6]);
-                
-                return user;
-            }
+                Id = int.Parse(parts[0]),
+                Username = parts[1],
+                Email = parts[2],
+                PasswordHash = parts[3],
+                Role = Enum.Parse<UserRole>(parts[4]),
+                VerificationCode = parts[5],
+                isVerified = bool.Parse(parts[6])
+            };
+
+            users.Add(user);
         }
-        return null;
+
+        return users;
+    }
+    public User GetUserByEmail(string email)
+    {
+        var users = GetAllUsers();
+
+        return users.FirstOrDefault(x =>
+            x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
     }
 
     public void DeleteAllUsers()

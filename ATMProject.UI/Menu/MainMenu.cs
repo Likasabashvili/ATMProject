@@ -1,20 +1,22 @@
 using ATMProject.Application.Services.Interfaces;
 using ATMProject.Domain.Enums;
 using ATMProject.Domain.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 namespace ATMProject.Menu;
 
 
 public class MainMenu
 {
-	public class Mainmenu
-	{
+		private readonly IConfiguration _configuration;
 		private readonly IUserService _service;
+		private readonly AdminMenu _adminMenu;
+		private readonly ClientMenu _clientMenu;
 
-
-		public Mainmenu(IUserService service)
+		public MainMenu(IUserService service,  IConfiguration configuration)
 		{
 			_service = service;
+			_configuration = configuration;
 
 		}
 
@@ -35,7 +37,7 @@ public class MainMenu
 					LoginUser();
 					break;
 				case "3. Verify":
-					//
+					Verify();
 					break;
 				case "0. Exit":
 					Console.WriteLine("Exited");
@@ -59,25 +61,57 @@ public class MainMenu
 			var passwordResult = AnsiConsole.Prompt(password);
 
 
-			Console.WriteLine("Enter Role");
-			UserRole role = Enum.Parse<UserRole>(Console.ReadLine());
+			var role = AnsiConsole.Prompt(
+				new SelectionPrompt<string>()
+					.Title("Choose Role")
+					.AddChoices("Admin", "Client"));
+			
+			UserRole selectedRole = role == "Admin"
+				? UserRole.Admin
+				: UserRole.Client;
+			
+			if(selectedRole == UserRole.Admin)
+			{
+				string secretword = AnsiConsole.Prompt(
+					new TextPrompt<string>("Enter Secret Word:").Secret()
+				);
+				if(secretword != _configuration["SecretWordForAdmin"])
+				{
+					Console.WriteLine("Invalid Secret Word. Defaulting to Client role.");
+					selectedRole = UserRole.Client;
+				}
+			}
 
-			_service.RegisterUser(userName, email, passwordResult, role);
+			_service.RegisterUser(userName, email, passwordResult, selectedRole);
 
 		}
 
-		public void LoginUser() // dont allow login if not verified
+		public void LoginUser()
 		{
 			Console.WriteLine("Enter Email");
 			string email = Console.ReadLine();
-			Console.WriteLine("Enter Password");
-			string password = Console.ReadLine();
 
-			var user = _service.LoginUser(email, password);
+			var password = new TextPrompt<string>("Enter Password:").Secret();
+			string passwordResult = AnsiConsole.Prompt(password);
 
+			var user = _service.LoginUser(email, passwordResult);
 
-
-
+			if (user.Role == UserRole.Admin)
+			{
+				_adminMenu.ShowMenu();
+			}
+			else if (user.Role == UserRole.Client)
+			{
+				_clientMenu.ShowMenu();
+			}
+		}
+		
+		public void Verify()
+		{
+			Console.WriteLine("Enter Email");
+			string email = Console.ReadLine();
+			Console.WriteLine("Enter Verification Code");
+			string verificationCode = Console.ReadLine();
+			_service.Verfy(email, verificationCode);
 		}
 	}
-}
