@@ -10,4 +10,9 @@ public class LoanRequest
     public LoanStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? ReviewedAt { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Id}|{ClientId}|{Amount}|{Status}|{CreatedAt}|{ReviewedAt}";
+    }
 }

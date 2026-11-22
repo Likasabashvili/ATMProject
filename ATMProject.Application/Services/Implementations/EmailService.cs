@@ -31,9 +31,150 @@ namespace University.Application.Services.Implemetations
 		}
 
 
-		public void SendVerificationCode(string email, string verificationCode)
-		{
-			SendEmail(email, "ვერიფიკაციის კოდი", $"public void SendVerificationCode(string email, string verificationCode)\r\n{{\r\n    string htmlBody = $@\"\r\n    <!DOCTYPE html>\r\n    <html lang='ka'>\r\n    <head>\r\n        <meta charset='UTF-8'>\r\n        <meta name='viewport' content='width=device-width, initial-scale=1.0'>\r\n        <title>ვერიფიკაციის კოდი</title>\r\n    </head>\r\n    <body style='margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, sans-serif;'>\r\n\r\n        <table width='100%' cellpadding='0' cellspacing='0' \r\n               style='background-color:#f4f6f8; padding:40px 15px;'>\r\n            <tr>\r\n                <td align='center'>\r\n\r\n                    <table width='100%' cellpadding='0' cellspacing='0'\r\n                           style='max-width:500px; background-color:#ffffff;\r\n                                  border-radius:12px; overflow:hidden;'>\r\n\r\n                        <tr>\r\n                            <td style='background-color:#61756b; padding:30px;\r\n                                       text-align:center;'>\r\n                                <h1 style='color:#ffffff; margin:0; font-size:24px;'>\r\n                                    Email Verification\r\n                                </h1>\r\n                            </td>\r\n                        </tr>\r\n\r\n                        <tr>\r\n                            <td style='padding:35px 30px; text-align:center;'>\r\n\r\n                                <h2 style='color:#333333; margin-top:0;'>\r\n                                    მოგესალმებით!\r\n                                </h2>\r\n\r\n                                <p style='color:#666666; font-size:15px;\r\n                                          line-height:1.6;'>\r\n                                    თქვენი ელფოსტის მისამართის დასადასტურებლად\r\n                                    გამოიყენეთ ქვემოთ მოცემული ვერიფიკაციის კოდი.\r\n                                </p>\r\n\r\n                                <div style='background-color:#f0f4f1;\r\n                                            border:1px dashed #61756b;\r\n                                            border-radius:8px;\r\n                                            padding:20px;\r\n                                            margin:25px 0;'>\r\n\r\n                                    <span style='font-size:32px;\r\n                                                 font-weight:bold;\r\n                                                 letter-spacing:8px;\r\n                                                 color:#61756b;'>\r\n                                        {verificationCode}\r\n                                    </span>\r\n\r\n                                </div>\r\n\r\n                                <p style='color:#888888; font-size:13px;'>\r\n                                    კოდი მოქმედებს 5 წუთის განმავლობაში.\r\n                                </p>\r\n\r\n                                <p style='color:#999999; font-size:12px;\r\n                                          line-height:1.5; margin-top:30px;'>\r\n                                    თუ თქვენ არ მოგითხოვიათ ვერიფიკაციის კოდი,\r\n                                    შეგიძლიათ უგულებელყოთ ეს შეტყობინება.\r\n                                </p>\r\n\r\n                            </td>\r\n                        </tr>\r\n\r\n                        <tr>\r\n                            <td style='background-color:#f8f9fa; padding:20px;\r\n                                       text-align:center;'>\r\n                                <p style='color:#999999; font-size:12px; margin:0;'>\r\n                                    © 2026 Your Application. All rights reserved.\r\n                                </p>\r\n                            </td>\r\n                        </tr>\r\n\r\n                    </table>\r\n\r\n                </td>\r\n            </tr>\r\n        </table>\r\n\r\n    </body>\r\n    </html>\";\r\n\r\n    ");
-		}
+
+public void SendVerificationCode(string email, string verificationCode)
+{
+    string htmlBody = $@"
+    <!DOCTYPE html>
+    <html lang='ka'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>ATM Verification</title>
+    </head>
+
+    <body style='margin:0; padding:0; background-color:#F0FDFA;
+                 font-family:Arial, Helvetica, sans-serif;'>
+
+        <table width='100%' cellpadding='0' cellspacing='0'
+               style='padding:50px 15px; background-color:#F0FDFA;'>
+            <tr>
+                <td align='center'>
+
+                    <table width='100%' cellpadding='0' cellspacing='0'
+                           style='max-width:520px; background:#FFFFFF;
+                                  border-radius:18px; overflow:hidden;
+                                  box-shadow:0 8px 30px rgba(15,118,110,0.10);'>
+
+                        <!-- Header -->
+                        <tr>
+                            <td style='background:#0F766E; padding:38px 25px;
+                                       text-align:center;'>
+
+                                <div style='font-size:13px; color:#CCFBF1;
+                                            letter-spacing:4px;
+                                            text-transform:uppercase;
+                                            margin-bottom:12px;'>
+                                    ATM PROJECT
+                                </div>
+
+                                <h1 style='color:#ffffff; margin:0;
+                                           font-size:27px; font-weight:600;'>
+                                    Email Verification
+                                </h1>
+
+                                <p style='color:#99F6E4; font-size:14px;
+                                          margin:12px 0 0;'>
+                                    Secure your account
+                                </p>
+
+                            </td>
+                        </tr>
+
+                        <!-- Main Content -->
+                        <tr>
+                            <td style='padding:40px 32px 35px;
+                                       text-align:center;'>
+
+                                <h2 style='color:#134E4A; font-size:23px;
+                                           margin:0 0 15px;'>
+                                    მოგესალმებით!
+                                </h2>
+
+                                <p style='color:#64748B; font-size:15px;
+                                          line-height:1.8; margin:0;'>
+                                    მადლობა, რომ აირჩიეთ ჩვენი საბანკო სისტემა.
+                                    თქვენი ანგარიშის გასააქტიურებლად
+                                    გთხოვთ, შეიყვანოთ ქვემოთ მოცემული კოდი.
+                                </p>
+
+                                <!-- Verification Code -->
+                                <div style='background:#F0FDFA;
+                                            border:1px solid #99F6E4;
+                                            border-radius:12px;
+                                            padding:25px 15px;
+                                            margin:30px 0;'>
+
+                                    <p style='color:#0F766E; font-size:12px;
+                                              letter-spacing:2px;
+                                              margin:0 0 14px;
+                                              text-transform:uppercase;'>
+                                        YOUR VERIFICATION CODE
+                                    </p>
+
+                                    <div style='font-size:36px;
+                                                font-weight:bold;
+                                                letter-spacing:10px;
+                                                color:#0F766E;'>
+                                        {verificationCode}
+                                    </div>
+
+                                </div>
+
+                                <p style='color:#0F766E; font-size:13px;
+                                          margin:0 0 25px;'>
+                                    კოდი მოქმედებს 5 წუთის განმავლობაში.
+                                </p>
+
+                                <div style='height:1px;
+                                            background:#CCFBF1;
+                                            margin:25px 0;'>
+                                </div>
+
+                                <p style='color:#94A3B8; font-size:12px;
+                                          line-height:1.7; margin:0;'>
+                                    თუ თქვენ არ მოგითხოვიათ ანგარიშის
+                                    ვერიფიკაცია, უგულებელყავით ეს შეტყობინება.
+                                    თქვენი ანგარიში უსაფრთხოდ დარჩება.
+                                </p>
+
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style='background:#F0FDFA; padding:23px;
+                                       text-align:center;'>
+
+                                <p style='color:#0F766E; font-size:13px;
+                                          font-weight:bold; margin:0 0 8px;'>
+                                    ATM PROJECT
+                                </p>
+
+                                <p style='color:#94A3B8; font-size:11px;
+                                          margin:0;'>
+                                    © 2026 ATM Project. All rights reserved.
+                                </p>
+
+                                <p style='color:#94A3B8; font-size:11px;
+                                          margin:8px 0 0;'>
+                                    Automated message — please do not reply.
+                                </p>
+
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+
+    </body>
+    </html>";
+
+    SendEmail(email, "ATM Project | Email Verification", htmlBody);
+}
+
 	}
 }

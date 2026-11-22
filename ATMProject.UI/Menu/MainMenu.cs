@@ -17,11 +17,12 @@ public class MainMenu
 		{
 			_service = service;
 			_configuration = configuration;
-
+			_adminMenu = new AdminMenu(service);
+			_clientMenu = new ClientMenu();
 		}
 
 
-		public void ShowMenu()
+		public bool ShowMenu()
 		{
 			var choice = AnsiConsole.Prompt(
 				new SelectionPrompt<string>()
@@ -32,20 +33,19 @@ public class MainMenu
 			{
 				case "1. Register":
 					RegisterUser();
-					break;
+					return true;
 				case "2. Login":
 					LoginUser();
-					break;
+					return true;
 				case "3. Verify":
 					Verify();
-					break;
+					return true;
 				case "0. Exit":
-					Console.WriteLine("Exited");
-					break;
+					Console.WriteLine("Exited.");
+					return false;
 				default:
 					Console.WriteLine("Invalid choice. Please try again.");
-					ShowMenu();
-					break;
+					return true;
 			}
 		}
 
@@ -82,9 +82,18 @@ public class MainMenu
 				}
 			}
 
-			_service.RegisterUser(userName, email, passwordResult, selectedRole);
+			try
+			{
+				_service.RegisterUser(userName, email, passwordResult, selectedRole);
 
+			}
+			catch (ArgumentException ex)
+			{
+				AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
+			}
+			
 		}
+		
 
 		public void LoginUser()
 		{
@@ -102,7 +111,7 @@ public class MainMenu
 			}
 			else if (user.Role == UserRole.Client)
 			{
-				_clientMenu.ShowMenu();
+				_clientMenu.ShowMenu(user);
 			}
 		}
 		

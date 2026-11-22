@@ -1,6 +1,7 @@
 using ATMProject.Application.Services.Interfaces;
 using ATMProject.Domain.Enums;
 using ATMProject.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace ATMProject.Application.Services;
 using ATMProject.Domain.Models;
@@ -10,6 +11,7 @@ public class UserService : IUserService
 
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
+    private readonly string _configuration;
 
     public UserService(IUserRepository userRepository, IEmailService emailService)
     {
@@ -19,6 +21,16 @@ public class UserService : IUserService
 
     public void RegisterUser(string username, string email, string password, UserRole role)
     {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            throw new ArgumentException("Username and Email are required!");
+        }
+        email = email.Trim();
+        if (string.IsNullOrWhiteSpace(email) || !new EmailAddressAttribute().IsValid(email))
+        {
+            throw new ArgumentException("Invalid Email Address!Please enter a valid email.");
+        }
         List<User> users = _userRepository.GetAllUsers();
 
         if (users.Any(x => x.Email == email))
@@ -36,26 +48,64 @@ public class UserService : IUserService
         Random random = new();
         string code = random.Next(1000, 9999).ToString();
 
-        var user = new User()
+        User user;
+
+        if (role == UserRole.Admin)
         {
-            Id = maxId,
-            Username = username,
-            Email = email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-            VerificationCode = code,
-            isVerified = false,
-            Role = role
-        };
-
+            user = new Admin
+            {
+                Id = maxId,
+                Username = username,
+                Email = email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                VerificationCode = code,
+                isVerified = false,
+                Role = role
+            };
+        }
+        else
+        {
+            user = new User
+            {
+                Id = maxId,
+                Username = username,
+                Email = email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                VerificationCode = code,
+                isVerified = false,
+                Role = role
+            };
+        }
         _userRepository.SaveUser(user);
-        //send vercode
+        _emailService.SendVerificationCode(email, code);
+        if (role == UserRole.Admin)
+        {
+            Console.WriteLine($"Welcome Admin {user.Username}!");
+        }
+        else
+        {
+            Console.WriteLine($"User {user.Username} successfully registered");
+        }
+        
     }
-
     public void Verfy(string email, string verificationCode)
     {
-        List<string> newUserList = new List<string>();
-        _userRepository.DeleteAllUsers();
-        _userRepository.SaveUsers(newUserList);
+        User user = _userRepository.GetUserByEmail(email);
+
+        if (user == null)
+            throw new ArgumentException("User not found!");
+
+        if (user.isVerified)
+            throw new InvalidOperationException("Account is already verified!");
+
+        if (user.VerificationCode != verificationCode)
+            throw new ArgumentException("Invalid verification code!");
+
+        user.isVerified = true;
+
+        _userRepository.UpdateUser(user);
+
+        Console.WriteLine("Account successfully verified!");
     }
 
     public User LoginUser(string email, string password)
@@ -63,21 +113,15 @@ public class UserService : IUserService
         var user = _userRepository.GetUserByEmail(email);
 
         if (user == null)
-        {
             throw new UnauthorizedAccessException("Invalid Email or Password");
-        }
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-        {
             throw new UnauthorizedAccessException("Invalid Email or Password");
-        }
 
-        Console.WriteLine("Login Successful!");
+        if (!user.isVerified)
+            throw new UnauthorizedAccessException("Please verify your account first!");
+
         return user;
+    
     }
 }
-        
-        
-    
-
-

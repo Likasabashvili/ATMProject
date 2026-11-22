@@ -11,6 +11,7 @@ public class User
     public UserRole Role { get; set; }
     public string VerificationCode { get; set; }
     public bool isVerified { get; set; } = false;
+   
     
 
 
