@@ -1,0 +1,16 @@
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/bin/Debug/net10.0/ATMProject.Application.deps.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/bin/Debug/net10.0/ATMProject.Application.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/bin/Debug/net10.0/ATMProject.Application.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/bin/Debug/net10.0/ATMProject.Domain.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/bin/Debug/net10.0/ATMProject.Domain.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.csproj.AssemblyReference.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.AssemblyInfoInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.AssemblyInfo.cs
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.csproj.CoreCompileInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.sourcelink.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProje.B2967C81.Up2Date
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/refint/ATMProject.Application.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ATMProject.Application.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/obj/Debug/net10.0/ref/ATMProject.Application.dll

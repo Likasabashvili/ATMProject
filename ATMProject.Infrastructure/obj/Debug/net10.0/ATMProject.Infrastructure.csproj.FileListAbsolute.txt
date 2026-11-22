@@ -1,0 +1,16 @@
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/bin/Debug/net10.0/ATMProject.Infrastructure.deps.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/bin/Debug/net10.0/ATMProject.Infrastructure.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/bin/Debug/net10.0/ATMProject.Infrastructure.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/bin/Debug/net10.0/ATMProject.Domain.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/bin/Debug/net10.0/ATMProject.Domain.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.csproj.AssemblyReference.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.AssemblyInfoInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.AssemblyInfo.cs
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.sourcelink.json
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProje.AAC99643.Up2Date
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/refint/ATMProject.Infrastructure.dll
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ATMProject.Infrastructure.pdb
+/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/obj/Debug/net10.0/ref/ATMProject.Infrastructure.dll
