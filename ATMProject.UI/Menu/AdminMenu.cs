@@ -1,6 +1,7 @@
 
 using ATMProject.Application.Services.Interfaces;
 using ATMProject.Domain.Models;
+using ATMProject.Domain.Enums;
 using Spectre.Console;
 
 namespace ATMProject.Menu;
@@ -24,13 +25,19 @@ public class AdminMenu
         _loanService = loanService;
     }
 
+  
+
     public void ShowMenu()
     {
         while (true)
         {
+            ShowHeader();
+
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("[red]ADMIN MENU[/]")
+                    .Title("[teal]ADMIN DASHBOARD[/]")
+                    .HighlightStyle(new Style(Color.Teal))
+                    .PageSize(10)
                     .AddChoices(
                         "View All Clients",
                         "Search Client",
@@ -42,6 +49,14 @@ public class AdminMenu
                         "Bank Statistics",
                         "Logout"
                     ));
+
+            if (choice == "Logout")
+            {
+                AnsiConsole.MarkupLine(
+                    "\n[teal]You have successfully logged out.[/]");
+                Thread.Sleep(700);
+                return;
+            }
 
             try
             {
@@ -78,37 +93,107 @@ public class AdminMenu
                     case "Bank Statistics":
                         ShowStatistics();
                         break;
-
-                    case "Logout":
-                        AnsiConsole.MarkupLine(
-                            "[yellow]Logged out successfully![/]");
-                        return;
                 }
             }
             catch (Exception ex)
             {
-                AnsiConsole.MarkupLine($"[red]Error: {Markup.Escape(ex.Message)}[/]");
+                AnsiConsole.MarkupLine(
+                    $"\n[red]Error:[/] {Markup.Escape(ex.Message)}");
             }
+
+            Pause();
         }
     }
 
-    // 1. View All Clients
+   
+
+    private void ShowHeader()
+    {
+        AnsiConsole.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("ATM BANK")
+                .Centered()
+                .Color(Color.Teal));
+
+        AnsiConsole.MarkupLine(
+            "[grey]ADMINISTRATION PANEL[/]");
+
+        AnsiConsole.Write(
+            new Rule("[teal]BANK MANAGEMENT SYSTEM[/]")
+                .RuleStyle(Color.Teal));
+
+        AnsiConsole.WriteLine();
+    }
+
+    
+
+    private void ShowSectionTitle(string title)
+    {
+        AnsiConsole.WriteLine();
+
+        AnsiConsole.Write(
+            new Rule($"[teal]{Markup.Escape(title)}[/]")
+                .RuleStyle(Color.Teal));
+
+        AnsiConsole.WriteLine();
+    }
+
+ 
+
+    private void ShowEmptyMessage(string message)
+    {
+        AnsiConsole.Write(
+            new Panel(
+                new Markup($"[grey]{Markup.Escape(message)}[/]"))
+                .Border(BoxBorder.Rounded)
+                .BorderColor(Color.Grey)
+                .Padding(2, 1));
+    }
+
+    
+
+    private int AskId(string message)
+    {
+        return AnsiConsole.Prompt(
+            new TextPrompt<int>($"[teal]{message}[/]")
+                .Validate(id => id > 0
+                    ? ValidationResult.Success()
+                    : ValidationResult.Error(
+                        "[red]ID must be greater than zero![/]")));
+    }
+
+    private void Pause()
+    {
+        AnsiConsole.MarkupLine(
+            "\n[grey]Press any key to continue...[/]");
+
+        Console.ReadKey(true);
+    }
+
+   
+
     private void ViewAllClients()
     {
+        ShowSectionTitle("ALL REGISTERED CLIENTS");
+
         var clients = _userService.GetAllClients();
 
         if (clients.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]No clients found.[/]");
+            ShowEmptyMessage("No clients have been registered yet.");
             return;
         }
 
-        var table = new Table();
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
-        table.AddColumn("ID");
-        table.AddColumn("Username");
-        table.AddColumn("Email");
-        table.AddColumn("Verified");
+        table.AddColumn("[teal]CLIENT ID[/]");
+        table.AddColumn("[teal]USERNAME[/]");
+        table.AddColumn("[teal]EMAIL[/]");
+        table.AddColumn("[teal]VERIFICATION[/]");
 
         foreach (var client in clients)
         {
@@ -116,55 +201,84 @@ public class AdminMenu
                 client.Id.ToString(),
                 Markup.Escape(client.Username),
                 Markup.Escape(client.Email),
-                client.isVerified ? "[green]Yes[/]" : "[red]No[/]"
+                client.isVerified
+                    ? "[green]Verified[/]"
+                    : "[yellow]Not Verified[/]"
             );
         }
 
         AnsiConsole.Write(table);
+
+        AnsiConsole.MarkupLine(
+            $"\n[grey]Total clients: [teal]{clients.Count}[/][/]");
     }
 
-    // 2. Search Client
+    
+
     private void SearchClient()
     {
-        int clientId = AnsiConsole.Ask<int>("Enter Client ID:");
+        ShowSectionTitle("SEARCH CLIENT");
+
+        int clientId = AskId("Enter Client ID:");
 
         var client = _userService.GetClientById(clientId);
 
-        var table = new Table();
+        if (client == null)
+        {
+            ShowEmptyMessage("Client not found.");
+            return;
+        }
 
-        table.AddColumn("ID");
-        table.AddColumn("Username");
-        table.AddColumn("Email");
-        table.AddColumn("Verified");
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
+        table.AddColumn("[teal]INFORMATION[/]");
+        table.AddColumn("[teal]DETAILS[/]");
+
+        table.AddRow("Client ID", client.Id.ToString());
+        table.AddRow("Username", Markup.Escape(client.Username));
+        table.AddRow("Email", Markup.Escape(client.Email));
         table.AddRow(
-            client.Id.ToString(),
-            Markup.Escape(client.Username),
-            Markup.Escape(client.Email),
-            client.isVerified ? "[green]Yes[/]" : "[red]No[/]"
+            "Verification",
+            client.isVerified
+                ? "[green]Verified[/]"
+                : "[yellow]Not Verified[/]"
         );
 
-        AnsiConsole.Write(table);
+        AnsiConsole.Write(
+            new Panel(table)
+                .Header("[teal]CLIENT PROFILE[/]")
+                .Border(BoxBorder.Rounded)
+                .BorderColor(Color.Teal)
+                .Padding(1, 1));
     }
 
-    // 3. View All Accounts
+   
+
     private void ViewAllAccounts()
     {
+        ShowSectionTitle("ALL BANK ACCOUNTS");
+
         var accounts = _accountService.GetAllAccounts();
 
         if (accounts.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]No accounts found.[/]");
+            ShowEmptyMessage("No accounts found.");
             return;
         }
 
-        var table = new Table();
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
-        table.AddColumn("Account ID");
-        table.AddColumn("Client ID");
-        table.AddColumn("Username");
-        table.AddColumn("Balance");
-        table.AddColumn("Blocked");
+        table.AddColumn("[teal]ACCOUNT ID[/]");
+        table.AddColumn("[teal]CLIENT ID[/]");
+        table.AddColumn("[teal]USERNAME[/]");
+        table.AddColumn("[teal]BALANCE[/]");
+        table.AddColumn("[teal]STATUS[/]");
 
         foreach (var account in accounts)
         {
@@ -172,74 +286,123 @@ public class AdminMenu
                 account.Id.ToString(),
                 account.ClientId.ToString(),
                 Markup.Escape(account.UserName),
-                account.Balance.ToString("F2"),
-                account.IsBlocked ? "[red]Yes[/]" : "[green]No[/]"
+                $"₾ {account.Balance:N2}",
+                account.IsBlocked
+                    ? "[red]Blocked[/]"
+                    : "[green]Active[/]"
             );
         }
 
         AnsiConsole.Write(table);
+
+        AnsiConsole.MarkupLine(
+            $"\n[grey]Total accounts: [teal]{accounts.Count}[/][/]");
     }
 
-    // 4. Manage Loan Requests
+   
+
     private void ManageLoanRequests()
     {
+        ShowSectionTitle("LOAN REQUEST MANAGEMENT");
+
         var loans = _loanService.GetAllLoanRequests();
 
         if (loans.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]No loan requests found.[/]");
+            ShowEmptyMessage("No loan requests found.");
             return;
         }
 
-        var table = new Table();
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
-        table.AddColumn("Loan ID");
-        table.AddColumn("Client ID");
-        table.AddColumn("Amount");
-        table.AddColumn("Status");
-        table.AddColumn("Created At");
+        table.AddColumn("[teal]LOAN ID[/]");
+        table.AddColumn("[teal]CLIENT ID[/]");
+        table.AddColumn("[teal]AMOUNT[/]");
+        table.AddColumn("[teal]STATUS[/]");
+        table.AddColumn("[teal]CREATED AT[/]");
 
         foreach (var loan in loans)
         {
+            string status = loan.Status switch
+            {
+                LoanStatus.Approved => "[green]Approved[/]",
+                LoanStatus.Rejected => "[red]Rejected[/]",
+                LoanStatus.Pending => "[yellow]Pending[/]",
+                _ => Markup.Escape(loan.Status.ToString())
+            };
+
             table.AddRow(
                 loan.Id.ToString(),
                 loan.ClientId.ToString(),
-                loan.Amount.ToString("F2"),
-                loan.Status.ToString(),
-                loan.CreatedAt.ToString("g")
+                $"₾ {loan.Amount:N2}",
+                status,
+                loan.CreatedAt.ToString("dd MMM yyyy, HH:mm")
             );
         }
 
         AnsiConsole.Write(table);
 
         var pendingLoans = loans
-            .Where(x => x.Status == ATMProject.Domain.Enums.LoanStatus.Pending)
+            .Where(x => x.Status == LoanStatus.Pending)
             .ToList();
 
         if (pendingLoans.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]There are no pending loan requests.[/]");
+            AnsiConsole.MarkupLine(
+                "\n[yellow]There are no pending loan requests.[/]");
             return;
         }
 
-        int loanId = AnsiConsole.Ask<int>("Enter Loan ID to review:");
+        AnsiConsole.MarkupLine(
+            $"\n[yellow]Pending requests: {pendingLoans.Count}[/]");
+
+        int loanId = AskId("Enter Loan ID to review:");
+
+        var selectedLoan = pendingLoans.FirstOrDefault(
+            x => x.Id == loanId);
+
+        if (selectedLoan == null)
+        {
+            AnsiConsole.MarkupLine(
+                "[red]This loan request does not exist or has already been reviewed.[/]");
+            return;
+        }
 
         var action = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Choose action:")
-                .AddChoices("Approve", "Reject", "Back")
-        );
+                .Title("[teal]CHOOSE ACTION[/]")
+                .HighlightStyle(new Style(Color.Teal))
+                .AddChoices(
+                    "Approve Loan",
+                    "Reject Loan",
+                    "Back"
+                ));
 
         switch (action)
         {
-            case "Approve":
-                _loanService.ApproveLoan(loanId);
-                AnsiConsole.MarkupLine("[green]Loan approved successfully![/]");
+            case "Approve Loan":
+                if (AnsiConsole.Confirm(
+                        "Are you sure you want to approve this loan?"))
+                {
+                    _loanService.ApproveLoan(loanId);
+
+                    AnsiConsole.MarkupLine(
+                        "\n[green]Loan approved successfully![/]");
+                }
                 break;
 
-            case "Reject":
-                _loanService.RejectLoan(loanId);
-                AnsiConsole.MarkupLine("[red]Loan rejected![/]");
+            case "Reject Loan":
+                if (AnsiConsole.Confirm(
+                        "Are you sure you want to reject this loan?"))
+                {
+                    _loanService.RejectLoan(loanId);
+
+                    AnsiConsole.MarkupLine(
+                        "\n[red]Loan rejected successfully![/]");
+                }
                 break;
 
             case "Back":
@@ -247,25 +410,31 @@ public class AdminMenu
         }
     }
 
-    // 5. View All Transactions
+   
+
     private void ViewAllTransactions()
     {
+        ShowSectionTitle("TRANSACTION HISTORY");
+
         var transactions = _transactionService.GetAllTransactions();
 
         if (transactions.Count == 0)
         {
-            AnsiConsole.MarkupLine("[yellow]No transactions found.[/]");
+            ShowEmptyMessage("No transactions found.");
             return;
         }
 
-        var table = new Table();
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
-        table.AddColumn("Transaction ID");
-        table.AddColumn("Account ID");
-        table.AddColumn("Type");
-        table.AddColumn("Amount");
-        table.AddColumn("Date");
-        table.AddColumn("Description");
+        table.AddColumn("[teal]TRANSACTION ID[/]");
+        table.AddColumn("[teal]ACCOUNT ID[/]");
+        table.AddColumn("[teal]TYPE[/]");
+        table.AddColumn("[teal]AMOUNT[/]");
+        table.AddColumn("[teal]DATE[/]");
+        table.AddColumn("[teal]DESCRIPTION[/]");
 
         foreach (var transaction in transactions)
         {
@@ -273,38 +442,66 @@ public class AdminMenu
                 transaction.Id.ToString(),
                 transaction.AccountId.ToString(),
                 Markup.Escape(transaction.Type),
-                transaction.Amount.ToString("F2"),
-                transaction.CreatedAt.ToString("g"),
-                Markup.Escape(transaction.Description)
+                $"₾ {transaction.Amount:N2}",
+                transaction.CreatedAt.ToString("dd MMM yyyy, HH:mm"),
+                Markup.Escape(transaction.Description ?? "")
             );
         }
 
         AnsiConsole.Write(table);
+
+        AnsiConsole.MarkupLine(
+            $"\n[grey]Total transactions: [teal]{transactions.Count}[/][/]");
     }
 
-    // 6. Block Account
+   
+
     private void BlockAccount()
     {
-        int clientId = AnsiConsole.Ask<int>("Enter Client ID:");
+        ShowSectionTitle("BLOCK ACCOUNT");
+
+        int clientId = AskId("Enter Client ID:");
+
+        if (!AnsiConsole.Confirm(
+                $"Are you sure you want to block client #{clientId}?"))
+        {
+            AnsiConsole.MarkupLine("[yellow]Action cancelled.[/]");
+            return;
+        }
 
         _accountService.BlockAccount(clientId);
 
-        AnsiConsole.MarkupLine("[red]Account blocked successfully![/]");
+        AnsiConsole.MarkupLine(
+            "\n[red]Account blocked successfully![/]");
     }
 
-    // 7. Unblock Account
+   
+
     private void UnblockAccount()
     {
-        int clientId = AnsiConsole.Ask<int>("Enter Client ID:");
+        ShowSectionTitle("UNBLOCK ACCOUNT");
+
+        int clientId = AskId("Enter Client ID:");
+
+        if (!AnsiConsole.Confirm(
+                $"Are you sure you want to unblock client #{clientId}?"))
+        {
+            AnsiConsole.MarkupLine("[yellow]Action cancelled.[/]");
+            return;
+        }
 
         _accountService.UnblockAccount(clientId);
 
-        AnsiConsole.MarkupLine("[green]Account unblocked successfully![/]");
+        AnsiConsole.MarkupLine(
+            "\n[green]Account unblocked successfully![/]");
     }
 
-    // 8. Bank Statistics
+   
+
     private void ShowStatistics()
     {
+        ShowSectionTitle("BANK OVERVIEW & STATISTICS");
+
         var clients = _userService.GetAllClients();
         var accounts = _accountService.GetAllAccounts();
         var transactions = _transactionService.GetAllTransactions();
@@ -312,28 +509,60 @@ public class AdminMenu
 
         decimal totalBalance = accounts.Sum(x => x.Balance);
 
+        int activeAccounts = accounts.Count(x => !x.IsBlocked);
+        int blockedAccounts = accounts.Count(x => x.IsBlocked);
+
         int pendingLoans = loans.Count(
-            x => x.Status == ATMProject.Domain.Enums.LoanStatus.Pending);
+            x => x.Status == LoanStatus.Pending);
 
         int approvedLoans = loans.Count(
-            x => x.Status == ATMProject.Domain.Enums.LoanStatus.Approved);
+            x => x.Status == LoanStatus.Approved);
 
         int rejectedLoans = loans.Count(
-            x => x.Status == ATMProject.Domain.Enums.LoanStatus.Rejected);
+            x => x.Status == LoanStatus.Rejected);
 
-        var table = new Table();
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
 
-        table.AddColumn("Bank Statistics");
-        table.AddColumn("Value");
+        table.AddColumn("[teal]BANK OVERVIEW[/]");
+        table.AddColumn("[teal]VALUE[/]");
 
-        table.AddRow("Total Clients", clients.Count.ToString());
-        table.AddRow("Total Accounts", accounts.Count.ToString());
-        table.AddRow("Total Balance", totalBalance.ToString("F2"));
-        table.AddRow("Total Transactions", transactions.Count.ToString());
-        table.AddRow("Pending Loans", pendingLoans.ToString());
-        table.AddRow("Approved Loans", approvedLoans.ToString());
-        table.AddRow("Rejected Loans", rejectedLoans.ToString());
+        table.AddRow("Total Clients", $"[white]{clients.Count}[/]");
+        table.AddRow("Total Accounts", $"[white]{accounts.Count}[/]");
+        table.AddRow("Active Accounts", $"[green]{activeAccounts}[/]");
+        table.AddRow("Blocked Accounts", $"[red]{blockedAccounts}[/]");
+        table.AddRow("Total Bank Balance", $"[teal]₾ {totalBalance:N2}[/]");
+        table.AddRow("Total Transactions", $"[white]{transactions.Count}[/]");
 
-        AnsiConsole.Write(table);
+        AnsiConsole.Write(
+            new Panel(table)
+                .Header("[teal]BANK PERFORMANCE[/]")
+                .Border(BoxBorder.Rounded)
+                .BorderColor(Color.Teal)
+                .Padding(1, 1));
+
+        AnsiConsole.WriteLine();
+
+        var loanTable = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Teal)
+            .Expand();
+
+        loanTable.AddColumn("[teal]LOAN STATISTICS[/]");
+        loanTable.AddColumn("[teal]COUNT[/]");
+
+        loanTable.AddRow("Pending Loans", $"[yellow]{pendingLoans}[/]");
+        loanTable.AddRow("Approved Loans", $"[green]{approvedLoans}[/]");
+        loanTable.AddRow("Rejected Loans", $"[red]{rejectedLoans}[/]");
+
+        AnsiConsole.Write(
+            new Panel(loanTable)
+                .Header("[teal]LOAN OVERVIEW[/]")
+                .Border(BoxBorder.Rounded)
+                .BorderColor(Color.Teal)
+                .Padding(1, 1));
     }
 }
+
