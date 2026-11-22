@@ -11,6 +11,6 @@ public class Transaction
 
     public override string ToString()
     {
-        return $"{Id}|{AccountId}|{Type}|{Amount}|{CreatedAt}|{Description}";
+        return $"{Id}|{AccountId}|{Type}|{Amount}|{CreatedAt:O}|{Description}";
     }
 }

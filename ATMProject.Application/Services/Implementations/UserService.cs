@@ -12,11 +12,13 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     private readonly string _configuration;
+    private readonly IAccountRepository _accountRepository;
 
-    public UserService(IUserRepository userRepository, IEmailService emailService)
+    public UserService(IUserRepository userRepository, IEmailService emailService, IAccountRepository accountRepository)
     {
         _userRepository = userRepository;
         _emailService = emailService;
+        _accountRepository = accountRepository;
     }
 
     public void RegisterUser(string username, string email, string password, UserRole role)
@@ -104,6 +106,27 @@ public class UserService : IUserService
         user.isVerified = true;
 
         _userRepository.UpdateUser(user);
+        if (user.Role == UserRole.Client)
+        {
+            var accounts = _accountRepository.GetAllAccounts();
+
+            int newAccountId = accounts.Count > 0
+                ? accounts.Max(x => x.Id) + 1
+                : 1;
+
+            Account account = new Account
+            {
+                Id = newAccountId,
+                ClientId = user.Id,
+                UserName = user.Username,
+                Balance = 0,
+                LoanStatus = false,
+                LoanAmount = 0,
+                IsBlocked = false
+            };
+
+            _accountRepository.SaveAccount(account);
+        }
 
         Console.WriteLine("Account successfully verified!");
     }
@@ -123,5 +146,23 @@ public class UserService : IUserService
 
         return user;
     
+    }
+    
+    public List<User> GetAllClients()
+    {
+        return _userRepository.GetAllUsers()
+            .Where(x => x.Role == UserRole.Client)
+            .ToList();
+    }
+
+    public User GetClientById(int clientId)
+    {
+        var client = _userRepository.GetAllUsers()
+            .FirstOrDefault(x => x.Id == clientId && x.Role == UserRole.Client);
+
+        if (client == null)
+            throw new ArgumentException("Client not found!");
+
+        return client;
     }
 }

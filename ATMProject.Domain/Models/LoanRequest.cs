@@ -13,6 +13,6 @@ public class LoanRequest
 
     public override string ToString()
     {
-        return $"{Id}|{ClientId}|{Amount}|{Status}|{CreatedAt}|{ReviewedAt}";
+        return $"{Id}|{ClientId}|{Amount}|{Status}|{CreatedAt:O}|{ReviewedAt:O}";
     }
 }

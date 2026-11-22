@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "7v8pCPK9gRk=",
+  "dgSpecHash": "45GfB5YtR0I=",
   "success": true,
   "projectFilePath": "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Application/ATMProject.Application.csproj",
   "expectedPackageFiles": [
-    "/Users/likasabashvili/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512"
+    "/Users/likasabashvili/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration/11.0.0/microsoft.extensions.configuration.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.configuration.abstractions/11.0.0/microsoft.extensions.configuration.abstractions.11.0.0.nupkg.sha512",
+    "/Users/likasabashvili/.nuget/packages/microsoft.extensions.primitives/11.0.0/microsoft.extensions.primitives.11.0.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -241,7 +241,8 @@
       "ATMProject.Application/1.0.0": {
         "dependencies": {
           "ATMProject.Domain": "1.0.0",
-          "BCrypt.Net-Next": "4.2.0"
+          "BCrypt.Net-Next": "4.2.0",
+          "Microsoft.Extensions.Configuration": "11.0.0"
         },
         "runtime": {
           "ATMProject.Application.dll": {

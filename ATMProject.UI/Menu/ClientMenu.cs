@@ -47,35 +47,35 @@ public class ClientMenu
                 switch (choice)
                 {
                     case "Check Balance":
-                        // CheckBalance();
+                        CheckBalance(currentUser.Id);
                         break;
 
                     case "Deposit Money":
-                        // Deposit();
+                        Deposit(currentUser.Id);
                         break;
 
                     case "Withdraw Money":
-                        // Withdraw();
+                        Withdraw(currentUser.Id);
                         break;
 
                     case "Transfer Money":
-                        // Transfer();
+                        Transfer(currentUser.Id);
                         break;
 
                     case "Transaction History":
-                        // ShowHistory();
+                        ShowHistory(currentUser.Id);
                         break;
 
                     case "Request Loan":
-                        // RequestLoan();
+                        RequestLoan(currentUser.Id);
                         break;
 
                     case "My Loans":
-                        // ShowMyLoans();
+                      ShowMyLoans(currentUser.Id);
                         break;
 
                     case "Account Information":
-                        // ShowAccountInformation();
+                        ShowAccountInformation(currentUser.Id);
                         break;
 
                     case "Logout":
@@ -104,11 +104,161 @@ public class ClientMenu
 
     private void Deposit(int clientId)
     {
-        // decimal amount = AskAmount("Enter deposit amount:");
-        //
-        // _accountService.Deposit(clientId, amount);
-        //
-        // AnsiConsole.MarkupLine(
-        //     $"[green]Successfully deposited {amount:N2} GEL![/]");
+        decimal amount = AskAmount("Enter deposit amount:");
+
+        var account = _accountService.GetAccountByClientId(clientId);
+
+        _accountService.Deposit(clientId, amount);
+
+        _transactionService.AddTransaction(
+            account.Id,
+            "Deposit",
+            amount,
+            "Money deposited"
+        );
+
+        AnsiConsole.MarkupLine(
+            $"[green]Successfully deposited {amount:N2} GEL![/]");
+    }
+    
+   
+    private void Withdraw(int clientId)
+    {
+        decimal amount = AskAmount("Enter withdrawal amount:");
+
+        var account = _accountService.GetAccountByClientId(clientId);
+
+        _accountService.Withdraw(clientId, amount);
+
+        _transactionService.AddTransaction(
+            account.Id,
+            "Withdraw",
+            amount,
+            "Money withdrawn"
+        );
+
+        AnsiConsole.MarkupLine(
+            $"[green]Successfully withdrawn {amount:N2} GEL![/]");
+    }
+
+    
+    private void Transfer(int senderId)
+    {
+        int receiverId = AnsiConsole.Prompt(
+            new TextPrompt<int>("Enter receiver's Client ID:")
+                .Validate(id => id > 0
+                    ? ValidationResult.Success()
+                    : ValidationResult.Error("[red]ID must be positive![/]")));
+
+        decimal amount = AskAmount("Enter transfer amount:");
+
+        _accountService.Transfer(senderId, receiverId, amount);
+
+        AnsiConsole.MarkupLine(
+            $"[green]Successfully transferred {amount:N2} GEL![/]");
+    }
+    private void ShowHistory(int clientId)
+    {
+        var account = _accountService.GetAccountByClientId(clientId);
+
+        var transactions =
+            _transactionService.GetTransactionsByAccountId(account.Id);
+
+        if (transactions.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]No transactions found.[/]");
+            return;
+        }
+
+        var table = new Table();
+
+        table.AddColumn("ID");
+        table.AddColumn("Type");
+        table.AddColumn("Amount");
+        table.AddColumn("Date");
+        table.AddColumn("Description");
+
+        foreach (var transaction in transactions)
+        {
+            table.AddRow(
+                transaction.Id.ToString(),
+                Markup.Escape(transaction.Type),
+                $"{transaction.Amount:N2} GEL",
+                transaction.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
+                Markup.Escape(transaction.Description ?? "")
+            );
+        }
+
+        AnsiConsole.Write(table);
+    }
+    private void RequestLoan(int clientId)
+    {
+        decimal amount = AskAmount("Enter requested loan amount:");
+
+        _loanService.RequestLoan(clientId, amount);
+
+        AnsiConsole.MarkupLine(
+            "[green]Your loan request was submitted successfully![/]");
+    }
+
+    private void ShowMyLoans(int clientId)
+    {
+        var loans = _loanService.GetLoansByClientId(clientId);
+
+        if (loans.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]You have no loan requests.[/]");
+            return;
+        }
+
+        var table = new Table();
+
+        table.AddColumn("Loan ID");
+        table.AddColumn("Amount");
+        table.AddColumn("Status");
+        table.AddColumn("Created At");
+        table.AddColumn("Reviewed At");
+
+        foreach (var loan in loans)
+        {
+            table.AddRow(
+                loan.Id.ToString(),
+                $"{loan.Amount:N2} GEL",
+                loan.Status.ToString(),
+                loan.CreatedAt.ToString("dd.MM.yyyy"),
+                loan.ReviewedAt?.ToString("dd.MM.yyyy") ?? "Not reviewed"
+            );
+        }
+
+        AnsiConsole.Write(table);
+    }
+
+    private void ShowAccountInformation(int clientId)
+    {
+        var account = _accountService.GetAccountByClientId(clientId);
+
+        var panel = new Panel(
+            $"[bold]Account ID:[/] {account.Id}\n" +
+            $"[bold]Client ID:[/] {account.ClientId}\n" +
+            $"[bold]Username:[/] {Markup.Escape(account.UserName)}\n" +
+            $"[bold]Balance:[/] {account.Balance:N2} GEL\n" +
+            $"[bold]Loan Status:[/] {(account.LoanStatus ? "Active" : "Inactive")}\n" +
+            $"[bold]Loan Amount:[/] {account.LoanAmount:N2} GEL"
+        );
+
+        panel.Header("Account Information");
+        panel.BorderColor(Color.Blue);
+
+        AnsiConsole.Write(panel);
+    }
+
+    private decimal AskAmount(string message)
+    {
+        return AnsiConsole.Prompt(
+            new TextPrompt<decimal>(message)
+                .Validate(amount => amount > 0
+                    ? ValidationResult.Success()
+                    : ValidationResult.Error(
+                        "[red]Amount must be greater than zero![/]")));
     }
 }

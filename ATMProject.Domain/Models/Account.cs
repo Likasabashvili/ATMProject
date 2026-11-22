@@ -8,9 +8,10 @@ public class Account
     public decimal Balance { get; set; } = 0;
     public bool LoanStatus { get; set; } = false;
     public decimal LoanAmount { get; set; } = 0;
+    public bool IsBlocked { get; set; } = false;
 
     public override string ToString()
     {
-        return $"{Id}|{ClientId}|{UserName}|{Balance}|{LoanStatus}|{LoanAmount}";
+        return $"{Id}|{ClientId}|{UserName}|{Balance}|{LoanStatus}|{LoanAmount}|{IsBlocked}";
     }
 }

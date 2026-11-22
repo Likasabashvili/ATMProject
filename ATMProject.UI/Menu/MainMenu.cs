@@ -1,26 +1,36 @@
 using ATMProject.Application.Services.Interfaces;
 using ATMProject.Domain.Enums;
 using ATMProject.Domain.Interfaces;
+using ATMProject.Menu;
 using Microsoft.Extensions.Configuration;
 using Spectre.Console;
-namespace ATMProject.Menu;
-
 
 public class MainMenu
 {
-		private readonly IConfiguration _configuration;
-		private readonly IUserService _service;
-		private readonly AdminMenu _adminMenu;
-		private readonly ClientMenu _clientMenu;
+	private readonly IConfiguration _configuration;
+	private readonly IUserService _service;
+	private readonly AdminMenu _adminMenu;
+	private readonly ClientMenu _clientMenu;
 
-		public MainMenu(IUserService service,  IConfiguration configuration)
-		{
-			_service = service;
-			_configuration = configuration;
-			_adminMenu = new AdminMenu(service);
-			_clientMenu = new ClientMenu();
-		}
+	public MainMenu(
+		IUserService service,
+		IConfiguration configuration,
+		IAccountService accountService,
+		ITransactionService transactionService,
+		ILoanService loanService)
+	{
+		_service = service;
+		_configuration = configuration;
 
+		_adminMenu = new AdminMenu(service,
+			accountService, transactionService, loanService);
+
+		_clientMenu = new ClientMenu(
+			accountService,
+			transactionService,
+			loanService
+		);
+	}
 
 		public bool ShowMenu()
 		{
@@ -97,21 +107,24 @@ public class MainMenu
 
 		public void LoginUser()
 		{
-			Console.WriteLine("Enter Email");
-			string email = Console.ReadLine();
-
-			var password = new TextPrompt<string>("Enter Password:").Secret();
-			string passwordResult = AnsiConsole.Prompt(password);
-
-			var user = _service.LoginUser(email, passwordResult);
-
-			if (user.Role == UserRole.Admin)
+			try
 			{
-				_adminMenu.ShowMenu();
+				Console.WriteLine("Enter Email");
+				string email = Console.ReadLine();
+
+				var password = new TextPrompt<string>("Enter Password:").Secret();
+				string passwordResult = AnsiConsole.Prompt(password);
+
+				var user = _service.LoginUser(email, passwordResult);
+
+				if (user.Role == UserRole.Admin)
+					_adminMenu.ShowMenu();
+				else if (user.Role == UserRole.Client)
+					_clientMenu.ShowMenu(user);
 			}
-			else if (user.Role == UserRole.Client)
+			catch (Exception ex)
 			{
-				_clientMenu.ShowMenu(user);
+				AnsiConsole.MarkupLine($"[red]{ex.Message}[/]");
 			}
 		}
 		
