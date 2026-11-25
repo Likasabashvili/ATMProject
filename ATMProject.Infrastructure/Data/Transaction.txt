@@ -1,2 +1,0 @@
-1|1|Deposit|300|2026-11-22T16:31:18.7715910+04:00|Money deposited
-2|1|Withdraw|50|2026-11-22T16:31:29.2677640+04:00|Money withdrawn
