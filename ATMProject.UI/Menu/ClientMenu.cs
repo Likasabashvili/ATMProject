@@ -2,7 +2,7 @@
 using ATMProject.Application.Services.Interfaces;
 using Spectre.Console;
 using ATMProject.Domain.Models;
-
+using ATMProject.Domain.Enums;
 namespace ATMProject.Menu;
 
 public class ClientMenu
@@ -95,10 +95,10 @@ public class ClientMenu
                         "Request Loan",
                         "My Loans",
                         "Account Information",
+                        "My Statistics",
                         "Logout"
                     )
             );
-
             try
             {
                 AnsiConsole.Clear();
@@ -135,6 +135,10 @@ public class ClientMenu
 
                     case "Account Information":
                         ShowAccountInformation(currentUser.Id);
+                        break;
+                    
+                    case "My Statistics":
+                        ShowStatistics(currentUser.Id);
                         break;
 
                     case "Logout":
@@ -249,7 +253,7 @@ public class ClientMenu
                 .RuleStyle(Color.Teal)
         );
 
-        // Receiver Client ID
+        
         int receiverId = AnsiConsole.Prompt(
             new TextPrompt<int>("[teal]Enter receiver's Client ID:[/]")
                 .Validate(id => id > 0
@@ -257,22 +261,22 @@ public class ClientMenu
                     : ValidationResult.Error("[red]ID must be positive![/]"))
         );
 
-        // Transfer Amount
+
         decimal amount = AskAmount(
             "[teal]Enter transfer amount (GEL):[/]"
         );
 
-        // Get sender and receiver accounts
+        
         var senderAccount =
             _accountService.GetAccountByClientId(senderId);
 
         var receiverAccount =
             _accountService.GetAccountByClientId(receiverId);
 
-        // Execute transfer
+       
         _accountService.Transfer(senderId, receiverId, amount);
 
-        // Sender transaction
+       
         _transactionService.AddTransaction(
             senderAccount.Id,
             "Transfer Out",
@@ -280,7 +284,7 @@ public class ClientMenu
             $"Money transferred to Client ID: {receiverId}"
         );
 
-        // Receiver transaction
+      
         _transactionService.AddTransaction(
             receiverAccount.Id,
             "Transfer In",
@@ -456,4 +460,127 @@ public class ClientMenu
                     ))
         );
     }
+    
+    
+private void ShowStatistics(int clientId)
+{
+    AnsiConsole.Write(
+        new Rule("[teal]MY ACCOUNT STATISTICS[/]")
+            .RuleStyle(Color.Teal)
+    );
+
+  
+    var account = _accountService.GetAccountByClientId(clientId);
+
+   
+    var transactions = _transactionService
+        .GetTransactionsByAccountId(account.Id);
+
+   
+    var loans = _loanService.GetLoansByClientId(clientId);
+
+   
+    decimal totalDeposited = transactions
+        .Where(x => x.Type == "Deposit")
+        .Sum(x => x.Amount);
+
+    decimal totalWithdrawn = transactions
+        .Where(x => x.Type == "Withdraw")
+        .Sum(x => x.Amount);
+
+    decimal totalSent = transactions
+        .Where(x => x.Type == "Transfer Out")
+        .Sum(x => x.Amount);
+
+    decimal totalReceived = transactions
+        .Where(x => x.Type == "Transfer In")
+        .Sum(x => x.Amount);
+
+    int totalTransactions = transactions.Count;
+
+    int transfersSent = transactions
+        .Count(x => x.Type == "Transfer Out");
+
+    int transfersReceived = transactions
+        .Count(x => x.Type == "Transfer In");
+
+   
+    int pendingLoans = loans.Count(x => x.Status == LoanStatus.Pending);
+    int approvedLoans = loans.Count(x => x.Status == LoanStatus.Approved);
+    int rejectedLoans = loans.Count(x => x.Status == LoanStatus.Rejected);
+
+   
+    string accountStatus = account.IsBlocked
+        ? "[red]BLOCKED[/]"
+        : "[green]ACTIVE[/]";
+
+   
+    var accountPanel = new Panel(
+        new Markup(
+            $"[grey]CURRENT BALANCE[/]\n" +
+            $"[teal bold]₾ {account.Balance:N2}[/]\n\n" +
+            $"[grey]ACCOUNT STATUS[/]\n" +
+            $"{accountStatus}\n\n" +
+            $"[grey]TOTAL TRANSACTIONS[/]\n" +
+            $"[white bold]{totalTransactions}[/]"
+        )
+    )
+    .Header("[teal]ACCOUNT OVERVIEW[/]")
+    .BorderColor(Color.Teal)
+    .Padding(2, 1);
+
+    AnsiConsole.Write(accountPanel);
+
+  
+    var moneyTable = new Table()
+        .Border(TableBorder.Rounded)
+        .BorderColor(Color.Teal)
+        .Expand();
+
+    moneyTable.AddColumn("[teal]TRANSACTION TYPE[/]");
+    moneyTable.AddColumn("[teal]TOTAL AMOUNT[/]");
+    moneyTable.AddColumn("[teal]COUNT[/]");
+
+    moneyTable.AddRow(
+        "[green]Deposited[/]",
+        $"₾ {totalDeposited:N2}",
+        transactions.Count(x => x.Type == "Deposit").ToString()
+    );
+
+    moneyTable.AddRow(
+        "[red]Withdrawn[/]",
+        $"₾ {totalWithdrawn:N2}",
+        transactions.Count(x => x.Type == "Withdraw").ToString()
+    );
+
+    moneyTable.AddRow(
+        "[yellow]Money Sent[/]",
+        $"₾ {totalSent:N2}",
+        transfersSent.ToString()
+    );
+
+    moneyTable.AddRow(
+        "[green]Money Received[/]",
+        $"₾ {totalReceived:N2}",
+        transfersReceived.ToString()
+    );
+
+    AnsiConsole.Write(moneyTable);
+
+    
+    var loanPanel = new Panel(
+        new Markup(
+            $"[yellow]Pending Loans:[/] {pendingLoans}\n" +
+            $"[green]Approved Loans:[/] {approvedLoans}\n" +
+            $"[red]Rejected Loans:[/] {rejectedLoans}\n\n" +
+            $"[grey]TOTAL LOAN REQUESTS:[/] [white bold]{loans.Count}[/]"
+        )
+    )
+    .Header("[teal]LOAN STATISTICS[/]")
+    .BorderColor(Color.Teal)
+    .Padding(2, 1);
+
+    AnsiConsole.Write(loanPanel);
+}
+
 }

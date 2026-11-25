@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ATMProject.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c98093c18cf9a398385aa62d573a70f6a94c4198")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+900cc81a24d70899d02174c742ae815d1d958781")]
 [assembly: System.Reflection.AssemblyProductAttribute("ATMProject.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ATMProject.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
