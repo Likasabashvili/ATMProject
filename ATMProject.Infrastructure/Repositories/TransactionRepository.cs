@@ -6,7 +6,7 @@ namespace ATMProject.Infrastructure;
 public class TransactionRepository : ITransactionRepository
 {
     private readonly string _path =
-        "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Transaction.txt";
+        @"/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Transaction.txt";
 
     public TransactionRepository()
     {

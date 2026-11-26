@@ -7,7 +7,7 @@ namespace ATMProject.Infrastructure;
 public class AccountRepository : IAccountRepository
 {
     private readonly string _path =
-        "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Account.txt";
+        @"/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Account.txt";
 
     public AccountRepository()
     {

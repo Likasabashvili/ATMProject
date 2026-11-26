@@ -7,7 +7,7 @@ namespace ATMProject.Infrastructure;
 public class LoanRepository : ILoanRepository
 {
     private readonly string _path =
-        "/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Loan.txt";
+        @"/Users/likasabashvili/Desktop/c#/ATMProject/ATMProject.Infrastructure/Data/Loan.txt";
 
     public LoanRepository()
     {
